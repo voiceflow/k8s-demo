@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+  namespace: k8s-demo
+  labels:
+    app: demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: demo
+        image: frankgu968/k8s-demo:latest
+        imagePullPolicy: Always
+        env: 
+        - name: PORT
+          value: "3000"
+        ports:
+        - name: app
+          containerPort: 3000
+        livenessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /health
+            port: app
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /ready
+            port: app
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 1
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi

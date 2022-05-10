@@ -1,0 +1,20 @@
+{
+  "name": "@voiceflow/k8s-demo",
+  "version": "1.0.0",
+  "description": "k8s demo application",
+  "main": "index.js",
+  "repository": "git@github.com:voiceflow/k8s-demo.git",
+  "author": "(Frank) Yu Cheng Gu <frank@voiceflow.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@godaddy/terminus": "^4.10.2",
+    "express": "^4.18.1",
+    "morgan": "^1.10.0"
+  },
+  "scripts": {
+    "build": "docker build --platform linux/amd64 . -t frankgu968/k8s-demo:latest",
+    "deploy": "yarn build && yarn push && kubectl rollout restart deploy -n k8s-demo",
+    "push": "docker push frankgu968/k8s-demo:latest",
+    "start": "node index.js"
+  }
+}
