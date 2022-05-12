@@ -6,7 +6,7 @@ metadata:
   labels:
     app: demo
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: demo
@@ -32,8 +32,8 @@ spec:
             path: /health
             port: app
             scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          initialDelaySeconds: 1
+          periodSeconds: 1
           successThreshold: 1
           timeoutSeconds: 1
         readinessProbe:
@@ -42,8 +42,8 @@ spec:
             path: /ready
             port: app
             scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          initialDelaySeconds: 1
+          periodSeconds: 1
           successThreshold: 1
           timeoutSeconds: 1
         resources:

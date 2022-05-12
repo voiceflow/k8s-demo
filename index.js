@@ -1,3 +1,4 @@
+const http = require('http');
 const express = require('express');
 const morgan = require('morgan');
 
@@ -16,7 +17,6 @@ app.use(morgan('dev', {
 
 // Environment variable configurations
 let port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
-let terminationGracePeriod = process.env.TERMINATION_GRACE_PERIOD ? process.env.TERMINATION_GRACE_PERIOD : 30;
 const defaultDelay = 30 * 1000; // 30s default delay interval for /long route
 
 // Application state
@@ -73,18 +73,17 @@ const server = app.listen(port, () => {
   console.log(`Voiceflow k8s demo listening on port: ${port}`)
 });
 
-server.on('connection', connection => {
-    connections.push(connection);
-    connection.on('close', () => connections = connections.filter(curr => curr !== connection));
-});
+process.on('SIGTERM', () => {
+  console.log('received SIGTERM')
 
-const shutdown = () =>  {
-  console.log(`Received kill signal, shutting down gracefully. Current connections: ${connections.length}`);
+  console.log('waiting for %d sec to close server', 30)
+  while(1);
+  setTimeout(() => {
+    console.log('calling server close')
 
-  // await server.close(() => {
-  //   console.log('Closed out remaining connections');
-  // });
-}
-
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+    server.close(() => {
+      console.log('server closed, exit')
+      process.exit(0)
+    })
+  }, 30*1000)
+})
