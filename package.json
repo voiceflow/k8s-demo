@@ -8,7 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@godaddy/terminus": "^4.10.2",
-    "express": "^4.18.1",
+    "express": "^4.19.2",
     "morgan": "^1.10.0"
   },
   "scripts": {
